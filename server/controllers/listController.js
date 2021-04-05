@@ -1,51 +1,44 @@
-const { List } = require('../db/models/list');
-const { User } = require('../db/models/user');
+const { List } = require("../db/models/list");
+const { User } = require("../db/models/user");
 
-exports.create = async (req, res) => {
-    const user = await User.findOne({ _id: req.params.id });
+exports.createNewList = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
     const listData = {
-        maker: user,
-        ...req.body
-    }
-    try{
-        const newList = new List(listData);
-        const list = await newList.save();
-        if(list){
-            return res.status(201).json(list)
-        }
-    } catch(err){
-        console.log(err)
-    }
-}
+      title: req.body.title,
+      description: req.body.description,
+      items: req.body.items,
+      public: req.body.public,
+      uniqueUrl: `${req.body.title}.${new Date().getTime().toString(36)}`,
+      tags: req.body.tags,
+      creator: user,
+    };
+
+    const newList = await List.create(listData);
+    return res.status(201).json(newList);
+
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send(err);
+  }
+};
 
 exports.getAllLists = async (req, res) => {
-
-    try {
-
-        const lists = await List.find({ maker: req.params.id });
-        if(lists){
-            res.status(200).json(lists);
-        }
-
-    } catch(err){
-        console.log(err)
-    }
-
-
-}
+  try {
+    const lists = await List.find({ creator: req.user._id });
+    res.status(200).json(lists);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send(err);
+  }
+};
 
 exports.getPublicLists = async (req, res) => {
-
-    try {
-
-        const lists = await List.find({}).populate('items');
-        if(lists){
-            res.status(200).json(lists);
-        }
-
-    } catch(err){
-        console.log(err)
-    }
-
-
-}
+  try {
+    const lists = await List.find({ public: true }).populate('items');
+    res.status(200).json(lists);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send(err);
+  }
+};

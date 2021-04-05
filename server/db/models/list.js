@@ -4,7 +4,8 @@ const { User } = require('./user');
 const ListSchema = mongoose.Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     description: {
         type: String,
@@ -26,10 +27,9 @@ const ListSchema = mongoose.Schema({
     tags: [{
         type: String
     }],
-    maker: {
+    creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        // required: true
     }
 
 })

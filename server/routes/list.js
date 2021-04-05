@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
+const { authenticate } = require('../middleware/authenticate');
+
 const listController = require('../controllers/listController');
 
-router.post('/:id/list', listController.create);
-router.get('/:id/list', listController.getAllLists);
-router.get('/lists/public', listController.getPublicLists);
+router.post('/', authenticate, listController.createNewList);
+router.get('/', authenticate, listController.getAllLists);
+router.get('/public', listController.getPublicLists);
 
 module.exports = router;
