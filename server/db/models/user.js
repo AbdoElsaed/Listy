@@ -1,60 +1,100 @@
 const mongoose = require("mongoose");
-const validator = require('validator');
-const jwt = require('jsonwebtoken');
+const validator = require("validator");
+const jwt = require("jsonwebtoken");
 
-const UserSchema = mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true,
-    minlength: 2,
-    trim: true,
-  },
-  lastName: {
-    type: String,
-    required: true,
-    minlength: 2,
-    trim: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    trim: true,
-    minlength: 1,
-    unique: true,
-    validate: {
-      validator: (value) => {
-        return validator.isEmail(value);
-      },
-      message: "not a valid email!",
+const ImgSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+    },
+    bucket: {
+      type: String,
+    },
+    key: {
+      type: String,
+    },
+    region: {
+      type: String,
+      default: process.env.AWS_REGION,
     },
   },
-  password: {
-    type: String,
-  },
-  uniqueUrl: {
-    type: String,
-    required: true,
-  },
-  image: {
-    type: String,
-    required: false,
-  },
-  coverImage: {
-    type: String,
-    required: false,
-  },
-  lists: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "List",
-    },
-  ],
-  createdAt: {
-    type: Date,
-    required: true,
-    default: Date.now,
-  },
+  {
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true },
+  }
+);
+
+ImgSchema.virtual("location").get(function () {
+  return encodeURI(
+    `https://${this.bucket}.s3.${this.region}.amazonaws.com/${this.key}`
+  );
 });
+
+const UserSchema = mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
+      minlength: 2,
+      trim: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+      minlength: 2,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 1,
+      unique: true,
+      validate: {
+        validator: (value) => {
+          return validator.isEmail(value);
+        },
+        message: "not a valid email!",
+      },
+    },
+    password: {
+      type: String,
+    },
+    uniqueUrl: {
+      type: String,
+      required: true,
+    },
+    avatar: {
+      type: ImgSchema,
+      required: false,
+    },
+    coverImage: {
+      type: ImgSchema,
+      required: false,
+    },
+    lists: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "List",
+      },
+    ],
+    gender: {
+      type: String,
+      enum: [
+        "male",
+        "female",
+        "non-binary",
+        "transgender",
+        "prefer not to disclose",
+      ],
+    },
+  },
+  {
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true },
+  },
+  { timestamps: true }
+);
 
 UserSchema.virtual("name").get(function () {
   return `${this.firstName} ${this.lastName}`;
@@ -86,5 +126,18 @@ UserSchema.statics.findByToken = function (token) {
   }
 };
 
+const returnedValues = [
+  "_id",
+  "name",
+  "firstName",
+  "lastName",
+  "email",
+  "uniqueUrl",
+  "avatar",
+  "coverImage",
+  "lists",
+  "gender",
+];
+
 const User = mongoose.model("User", UserSchema);
-module.exports = { User };
+module.exports = { User, returnedValues };

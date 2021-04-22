@@ -1,24 +1,42 @@
+const axios = require('axios').default;
+const cheerio = require("cheerio");
+
 const { Item } = require("../db/models/item");
 const { List } = require("../db/models/list");
 
 exports.createNewItem = async (req, res) => {
   try {
-    const existList = await List.findById(req.body.list);
+    const existList = await List.findOne({ title: req.body.list, creator: req.user._id });
 
-    // handle the case if the list doesn't exist
+    // create a new list if the list doesn't exist
     if (!existList) {
-      return res.status(400).send('List doesn\'t exist!');
+      const listData = {
+        title: req.body.list,
+        creator: req.user._id,
+        uniqueUrl: `${req.body.list}.${new Date().getTime().toString(36)}`,
+      }
+      await List.create(listData);
     }
 
-    const list = await List.findByIdAndUpdate(
-      req.body.list,
-      { $addToSet: { tags: { $each: req.body.tags } } },
+    // handle the sent tags
+    // const tags = req.body.tags && req.body.tags.length > 0 && (typeof req.body.tags) !== 'string' ? req.body.tags : (typeof req.body.tags === 'string') ? [req.body.tags] : [];
+    const tags = req.body.tags && req.body.tags.includes(',') ? req.body.tags.split(',') : [req.body.tags];
+
+    const list = await List.findOneAndUpdate(
+      { title: req.body.list, creator: req.user._id },
+      { $addToSet: { tags: { $each: tags } } },
       { new: true }
     );
+
+    // get title of the link page
+    const body = await axios.get(req.body.link);
+    const $ = cheerio.load(body.data);
+    const title = $("title").text();
 
     const itemData = {
       ...req.body,
       list,
+      title: title ? title : ''
     };
 
     const newItem = await Item.create(itemData);

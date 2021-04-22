@@ -6,6 +6,9 @@ const ItemSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  title: {
+    type: String,
+  },
   type: {
     type: String,
     enum: ["video", "article"],

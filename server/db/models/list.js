@@ -25,7 +25,8 @@ const ListSchema = mongoose.Schema({
         required: true
     },
     tags: [{
-        type: String
+        type: String,
+        trim: true
     }],
     creator: {
         type: mongoose.Schema.Types.ObjectId,
