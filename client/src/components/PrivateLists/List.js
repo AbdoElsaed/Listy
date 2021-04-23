@@ -11,6 +11,7 @@ import Chip from "@material-ui/core/Chip";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import DeleteIcon from "@material-ui/icons/Delete";
+import IconButton from "@material-ui/core/IconButton";
 
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
@@ -60,7 +61,8 @@ const useStyles = makeStyles((theme) => ({
     margin: "0px 3px",
   },
   deleteBtn: {
-    backgroundColor: "#7c0c33",
+    // color: "#7c0c33",
+    // backgroundColor: "#7c0c33",
     // backgroundColor: '#1a1a1c',
     fontWeight: "bold",
   },
@@ -132,6 +134,7 @@ const List = ({ list }) => {
             className={classes.switch}
             control={
               <Switch
+                size="small"
                 checked={isPublic}
                 onChange={handleSwitchChange}
                 name="public"
@@ -141,15 +144,15 @@ const List = ({ list }) => {
             label="Public"
           />
 
-          <Button
-            // variant="outlined"
+          <IconButton
+            color="secondary"
             size="small"
+            aria-label="delete"
             className={classes.deleteBtn}
-            startIcon={<DeleteIcon />}
             onClick={handleDeleteList}
           >
-            Delete
-          </Button>
+            <DeleteIcon />
+          </IconButton>
 
           {/* <Button size="small">Cancel</Button>
           <Button size="small" color="primary">
