@@ -11,9 +11,8 @@ import Switch from "@material-ui/core/Switch";
 
 import { Typography } from "@material-ui/core";
 
-import { addList } from "../../utils/api"
+import { addList } from "../../utils/api";
 import { useAuth } from "../shared/Auth";
-
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -126,10 +125,10 @@ const AddList = ({ open, setOpen, handleOpen, handleClose }) => {
     };
 
     let token = JSON.parse(localStorage.getItem("token"));
-    const list = await addList({ data, token })
-    if(list) {
+    const list = await addList({ data, token });
+    if (list) {
       handleCloseModal();
-      await refreshLists()
+      await refreshLists();
     }
   };
 

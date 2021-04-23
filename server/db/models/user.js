@@ -78,6 +78,12 @@ const UserSchema = mongoose.Schema(
         ref: "List",
       },
     ],
+    savedLists: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "List",
+      },
+    ],
     gender: {
       type: String,
       enum: [
@@ -136,6 +142,7 @@ const returnedValues = [
   "avatar",
   "coverImage",
   "lists",
+  "savedLists",
   "gender",
 ];
 

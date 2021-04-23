@@ -65,7 +65,7 @@ const Header = () => {
     <div className={classes.root}>
       <div className={classes.container}>
         <AvatarEditorBtn />
-        <h3 className={classes.name}>{user.name}</h3>
+        <h3 className={classes.name}>{user?.name}</h3>
         <Button
           variant="contained"
           color="primary"

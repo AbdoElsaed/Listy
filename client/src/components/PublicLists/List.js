@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import clsx from "clsx";
@@ -10,6 +10,17 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Chip from "@material-ui/core/Chip";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
+import DeleteIcon from "@material-ui/icons/Delete";
+import IconButton from "@material-ui/core/IconButton";
+import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
+import BookmarkIcon from "@material-ui/icons/Bookmark";
+
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
+
+import { deleteList, editList, saveList, unSaveList } from "../../utils/api";
+import { useAuth } from "../shared/Auth";
+import { isListAuthor } from "../shared/helpers";
 
 import ListItems from "./ListItems";
 
@@ -48,14 +59,68 @@ const useStyles = makeStyles((theme) => ({
   },
   tagsContainer: {
     marginLeft: 10,
+    marginBottom: 10,
   },
   tag: {
     margin: "0px 3px",
+  },
+  deleteBtn: {
+    // color: "#7c0c33",
+    // backgroundColor: "#7c0c33",
+    // backgroundColor: '#1a1a1c',
+    fontWeight: "bold",
   },
 }));
 
 const List = ({ list }) => {
   const classes = useStyles();
+
+  const [isPublic, setIsPublic] = useState(list.public);
+  const [saved, setSaved] = useState();
+
+  const {
+    user,
+    refreshLists,
+    isAuthenticated,
+    savedLists,
+    refreshSavedLists,
+  } = useAuth();
+  const isAuthor = isAuthenticated ? isListAuthor(list, user._id) : false;
+
+  useEffect(() => {
+    const check = savedLists.find((l) => l._id === list._id);
+    setSaved(check ? true : false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [savedLists]);
+
+  const handleSwitchChange = async () => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    const data = { public: !isPublic };
+    setIsPublic(!isPublic);
+    await editList({ token, id: list._id, data });
+  };
+
+  const handleDeleteList = async () => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm("are u sure ?")) {
+      const data = await deleteList({ token, id: list._id });
+      if (data) {
+        await refreshLists();
+      }
+    }
+  };
+
+  const handleSaveList = async () => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    if (saved) {
+      await unSaveList({ token, listId: list._id });
+    } else {
+      await saveList({ token, listId: list._id });
+    }
+    setSaved(!saved);
+    await refreshSavedLists();
+  };
 
   return (
     <div>
@@ -75,23 +140,61 @@ const List = ({ list }) => {
           </div>
         </AccordionSummary>
         <AccordionDetails className={classes.details}>
-          <ListItems items={list.items} />
+          <ListItems isAuthor={isAuthor} items={list.items} />
         </AccordionDetails>
         {/* <Divider /> */}
 
         <div className={classes.tagsContainer}>
           {list.tags
             ? list.tags.map((tag) => (
-                <Chip className={classes.tag} color="" variant="outlined" size="small" label={tag} />
+                <Chip
+                  className={classes.tag}
+                  color=""
+                  variant="outlined"
+                  size="small"
+                  label={tag}
+                />
               ))
             : null}
         </div>
 
         <AccordionActions>
-          {/* <Button size="small">Cancel</Button>
-          <Button size="small" color="primary">
-            Save
-          </Button> */}
+          {isAuthor ? (
+            <>
+              <FormControlLabel
+                className={classes.switch}
+                control={
+                  <Switch
+                    size="small"
+                    checked={isPublic}
+                    onChange={handleSwitchChange}
+                    name="public"
+                    color="secondary"
+                  />
+                }
+                label="Public"
+              />
+
+              <IconButton
+                color="secondary"
+                size="small"
+                aria-label="delete"
+                className={classes.deleteBtn}
+                onClick={handleDeleteList}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </>
+          ) : null}
+
+          <IconButton
+            aria-label="save"
+            color="secondary"
+            size="small"
+            onClick={handleSaveList}
+          >
+            {saved ? <BookmarkIcon /> : <BookmarkBorderIcon />}
+          </IconButton>
         </AccordionActions>
       </Accordion>
     </div>

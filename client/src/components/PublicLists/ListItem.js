@@ -13,6 +13,10 @@ import PauseCircleFilledIcon from "@material-ui/icons/PauseCircleFilled";
 import ReactPlayer from "react-player/lazy";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import GetAppIcon from "@material-ui/icons/GetApp";
+import DeleteIcon from "@material-ui/icons/Delete";
+
+import { deleteItem } from "../../utils/api";
+import { useAuth } from "../shared/Auth";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,9 +32,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Item = ({ item }) => {
+const Item = ({ isAuthor, item }) => {
   const classes = useStyles();
   const [showVideo, setShowVideo] = useState(false);
+
+  const { refreshLists } = useAuth();
 
   const isVideo = item.type === "video" ? true : false;
   const isArticle = item.type === "article" ? true : false;
@@ -49,6 +55,17 @@ const Item = ({ item }) => {
 
   const openLink = (link) => {
     window.open(link, "_blank");
+  };
+
+  const handleDeleteItem = async () => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm("are u sure ?")) {
+      const data = await deleteItem({ token, id: item._id });
+      if (data) {
+        await refreshLists();
+      }
+    }
   };
 
   return (
@@ -106,6 +123,16 @@ const Item = ({ item }) => {
         >
           <OpenInNewIcon className={classes.btn} />
         </IconButton>
+
+        {isAuthor ? (
+          <IconButton
+            aria-label="delete"
+            color="secondary"
+            onClick={handleDeleteItem}
+          >
+            <DeleteIcon className={classes.btn} />
+          </IconButton>
+        ) : null}
       </ListItem>
     </div>
   );

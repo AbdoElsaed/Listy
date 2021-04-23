@@ -1,5 +1,4 @@
 export const createFormData = (values, stringify = []) => {
-console.log('values', values);
   const formData = new FormData();
 
   Object.keys(values).forEach((key) => {
@@ -13,4 +12,12 @@ console.log('values', values);
   });
 
   return formData;
+};
+
+export const isListAuthor = (list, userId) => {
+  return list.creator === userId ? true : false;
+};
+
+export const isSavedList = (list, user) => {
+  return user.savedLists && user.savedLists.includes(list._id) ? true : false;
 };

@@ -59,13 +59,7 @@ const AvatarEditorBtn = () => {
         <img
           className={classes.avatar}
           alt="avatar"
-          src={
-            isAuthenticated
-              ? avatar
-                ? avatar
-                : "https://randomuser.me/api/portraits/men/4.jpg"
-              : "/anon.png"
-          }
+          src={avatar ? avatar : "/anon.png"}
         ></img>
       </div>
 

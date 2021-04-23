@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import clsx from "clsx";
@@ -10,8 +10,15 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Chip from "@material-ui/core/Chip";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
+import DeleteIcon from "@material-ui/icons/Delete";
 
-import ListItems from './ListItems';
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
+
+import { deleteList, editList } from "../../utils/api";
+import { useAuth } from "../shared/Auth";
+
+import ListItems from "./ListItems";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,10 +59,37 @@ const useStyles = makeStyles((theme) => ({
   tag: {
     margin: "0px 3px",
   },
+  deleteBtn: {
+    backgroundColor: "#7c0c33",
+    // backgroundColor: '#1a1a1c',
+    fontWeight: "bold",
+  },
 }));
 
 const List = ({ list }) => {
   const classes = useStyles();
+
+  const [isPublic, setIsPublic] = useState(list.public);
+
+  const { refreshLists } = useAuth();
+
+  const handleSwitchChange = async () => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    const data = { public: !isPublic };
+    setIsPublic(!isPublic);
+    await editList({ token, id: list._id, data });
+  };
+
+  const handleDeleteList = async () => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm("are u sure ?")) {
+      const data = await deleteList({ token, id: list._id });
+      if (data) {
+        await refreshLists();
+      }
+    }
+  };
 
   return (
     <div>
@@ -82,12 +116,41 @@ const List = ({ list }) => {
         <div className={classes.tagsContainer}>
           {list.tags
             ? list.tags.map((tag) => (
-                <Chip className={classes.tag} color="secondary" variant="outlined" size="small" label={tag} />
+                <Chip
+                  className={classes.tag}
+                  color="secondary"
+                  variant="outlined"
+                  size="small"
+                  label={tag}
+                />
               ))
             : null}
         </div>
 
         <AccordionActions>
+          <FormControlLabel
+            className={classes.switch}
+            control={
+              <Switch
+                checked={isPublic}
+                onChange={handleSwitchChange}
+                name="public"
+                color="secondary"
+              />
+            }
+            label="Public"
+          />
+
+          <Button
+            // variant="outlined"
+            size="small"
+            className={classes.deleteBtn}
+            startIcon={<DeleteIcon />}
+            onClick={handleDeleteList}
+          >
+            Delete
+          </Button>
+
           {/* <Button size="small">Cancel</Button>
           <Button size="small" color="primary">
             Save

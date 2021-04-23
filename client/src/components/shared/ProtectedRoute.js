@@ -10,10 +10,10 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) => {
-        if (isAuthenticated) {
+        if (localStorage.getItem('token')) {
           return <Component {...rest} {...props} />;
         } else {
-          history.push("/");
+          history.push("/login");
           //   return (
           //     <Redirect
           //       to={{

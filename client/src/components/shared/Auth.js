@@ -7,7 +7,7 @@ import {
   useRef,
 } from "react";
 
-import { getPublicLists, getMyLists, getAvatar } from "../../utils/api";
+import { getPublicLists, getMyLists, getAvatar, getSavedLists } from "../../utils/api";
 
 export const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
   const [avatar, setAvatar] = useState(null);
   const [publicLists, setPublicLists] = useState([]);
   const [myLists, setMyLists] = useState([]);
+  const [savedLists, setSavedLists] = useState([]);
 
   // first loading the app make checks
   useEffect(() => {
@@ -36,6 +37,7 @@ export const AuthProvider = ({ children }) => {
     (async () => {
       await refreshPublicLists();
       await refreshMyLists();
+      await refreshSavedLists();
     })();
   }, [isAuthenticated]);
 
@@ -44,8 +46,10 @@ export const AuthProvider = ({ children }) => {
       const token = JSON.parse(localStorage.getItem("token"));
       if (token) {
         const { avatar } = await getAvatar(token);
-        localStorage.setItem("avatar", JSON.stringify(avatar.location));
-        setAvatar(avatar.location);
+        if (avatar && avatar.location) {
+          localStorage.setItem("avatar", JSON.stringify(avatar.location));
+          setAvatar(avatar.location);
+        }
       }
     })();
   }, [user, avatar]);
@@ -63,10 +67,18 @@ export const AuthProvider = ({ children }) => {
     setMyLists(myLists);
   };
 
+  // refresh saved Lists
+  const refreshSavedLists = async () => {
+    let token = JSON.parse(localStorage.getItem("token"));
+    const savedLists = await getSavedLists(token);
+    setSavedLists(savedLists);
+  };
+
   // refresh all lists
   const refreshLists = async () => {
     await refreshPublicLists();
     await refreshMyLists();
+    await refreshSavedLists();
   };
 
   const filterPublicLists = async (tag) => {
@@ -89,6 +101,7 @@ export const AuthProvider = ({ children }) => {
   const logout = useCallback(() => {
     localStorage.removeItem("listyUser");
     localStorage.removeItem("token");
+    localStorage.removeItem("avatar");
     setIsAuthenticated(false);
     setUser(null);
     setAvatar(null);
@@ -111,6 +124,8 @@ export const AuthProvider = ({ children }) => {
         filterPrivateLists,
         avatar,
         setAvatar,
+        savedLists,
+        refreshSavedLists
       }}
     >
       {children}

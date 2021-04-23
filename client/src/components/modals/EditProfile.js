@@ -72,10 +72,10 @@ const AddList = ({ open, setOpen, handleOpen, handleClose }) => {
   const classes = useStyles();
   const { user, setUser } = useAuth();
 
-  const [firstName, setFirstName] = useState(user.firstName);
-  const [lastName, setLastName] = useState(user.lastName);
-  const [email, setEmail] = useState(user.email);
-  const [gender, setGender] = useState(user.gender);
+  const [firstName, setFirstName] = useState(user && user.firstName);
+  const [lastName, setLastName] = useState(user && user.lastName);
+  const [email, setEmail] = useState(user && user.email);
+  const [gender, setGender] = useState(user && user.gender);
 
   const handleCloseModal = () => {
     handleClose();

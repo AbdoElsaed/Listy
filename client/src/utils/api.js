@@ -121,3 +121,81 @@ export const getAvatar = async (token) => {
   const { avatar } = await res.json();
   return avatar;
 };
+
+export const deleteItem = async ({ token, id }) => {
+  const res = await fetch(`${API}/item/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: token,
+    },
+  });
+
+  const item = await res.json();
+  return item;
+};
+
+export const deleteList = async ({ token, id }) => {
+  const res = await fetch(`${API}/list/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: token,
+    },
+  });
+
+  const list = await res.json();
+  return list;
+};
+
+export const editList = async ({ token, id, data }) => {
+  const res = await fetch(`${API}/list/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+    body: JSON.stringify(data),
+  });
+
+  const list = await res.json();
+  return list;
+};
+
+export const saveList = async ({ token, listId }) => {
+  const res = await fetch(`${API}/user/saveList`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+    body: JSON.stringify({ listId }),
+  });
+
+  const user = await res.json();
+  return user;
+};
+
+export const unSaveList = async ({ token, listId }) => {
+  const res = await fetch(`${API}/user/unSaveList`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+    body: JSON.stringify({ listId }),
+  });
+
+  const user = await res.json();
+  return user;
+};
+
+export const getSavedLists = async (token) => {
+  const res = await fetch(`${API}/user/savedLists`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  });
+
+  const { savedLists } = await res.json();
+  return savedLists;
+};
