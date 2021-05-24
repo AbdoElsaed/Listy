@@ -1,0 +1,24 @@
+{
+    "development": {
+      "PORT": 5000,
+      "MONGODB_URI": "mongodb+srv://apdo:3146411@mvp.8153n.mongodb.net/listy?authSource=admin&retryWrites=true&w=majority",
+      "JWT_SECRET": "2fa17c273c57210b8b4153f837b4bde1615b62a0933655466e3eedd3666c2884cd5ad0f012d1358073830d7d6af620f37b40d47c90a8f7e041b611637914b871",
+      "ADMIN_BRO_EMAIL":"listy@admin",
+      "ADMIN_BRO_PASSWORD":"admin@1234",
+      "AWS_BUCKET": "listy-users",
+      "AWS_ACCESS_KEY": "AKIAITSFOBEBBOHFCCPQ",
+      "AWS_SECRET_ACCESS_KEY": "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",
+      "AWS_REGION": "me-south-1"
+    },
+    "production": {
+        "PORT": 5000,
+        "MONGODB_URI": "mongodb+srv://apdo:3146411@mvp.8153n.mongodb.net/listy?authSource=admin&retryWrites=true&w=majority",
+        "JWT_SECRET": "2fa17c273c57210b8b4153f837b4bde1615b62a0933655466e3eedd3666c2884cd5ad0f012d1358073830d7d6af620f37b40d47c90a8f7e041b611637914b871",
+        "ADMIN_BRO_EMAIL":"listy@admin",
+        "ADMIN_BRO_PASSWORD":"admin@1234",
+        "AWS_BUCKET": "listy-users",
+        "AWS_ACCESS_KEY": "AKIAITSFOBEBBOHFCCPQ",
+        "AWS_SECRET_ACCESS_KEY": "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",
+        "AWS_REGION": "me-south-1"
+    }
+  }
