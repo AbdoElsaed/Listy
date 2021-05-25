@@ -13,6 +13,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import SettingsIcon from "@material-ui/icons/Settings";
 import PersonIcon from "@material-ui/icons/Person";
+import BookmarksIcon from '@material-ui/icons/Bookmarks';
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -77,9 +78,7 @@ export default function UserMenu() {
 
   const {
     isAuthenticated,
-    setIsAuthenticated,
     user,
-    setUser,
     logout,
     avatar,
   } = useAuth();
@@ -145,6 +144,14 @@ export default function UserMenu() {
                   <PersonIcon />
                 </ListItemIcon>
                 <ListItemText primary="Profile" />
+              </StyledMenuItem>
+            </Link>
+            <Link className={classes.link} to="/bookmarks">
+              <StyledMenuItem onClick={handleClose}>
+                <ListItemIcon className={classes.icon}>
+                  <BookmarksIcon />
+                </ListItemIcon>
+                <ListItemText primary="Bookmarks" />
               </StyledMenuItem>
             </Link>
             <StyledMenuItem onClick={handleClose}>

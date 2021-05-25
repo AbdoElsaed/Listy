@@ -17,6 +17,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 import { deleteItem } from "../../utils/api";
 import { useAuth } from "../shared/Auth";
+import useWindowSize from "../../utils/useWindowSize";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Item = ({ item }) => {
   const classes = useStyles();
+  const { width } = useWindowSize();
+
   const [showVideo, setShowVideo] = useState(false);
 
   const { refreshLists } = useAuth();
@@ -42,7 +45,8 @@ const Item = ({ item }) => {
   const isArticle = item.type === "article" ? true : false;
 
   const isYoutubeUrl = (url) => {
-    const regex = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    const regex =
+      /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
     if (url && url.match(regex)) {
       return true;
     }
@@ -70,67 +74,74 @@ const Item = ({ item }) => {
 
   return (
     <div>
-      <ListItem id={item._id}>
-        <ListItemIcon>
-          {isVideo ? (
-            <YouTubeIcon className={classes.itemIcon} />
-          ) : isArticle ? (
-            <DescriptionIcon className={classes.itemIcon} />
-          ) : (
-            ""
-          )}
-        </ListItemIcon>
-        {/* <ListItemText id="switch-list-label-wifi" primary="Wi-Fi" /> */}
-        {showVideo ? (
-          <ReactPlayer
-            width={250}
-            height={150}
-            playing={true}
-            url={item.link}
-          />
-        ) : (
-          <p>{item.title ? item.title : item.link}</p>
-        )}
-
-        {isVideo ? (
-          <IconButton
-            aria-label="delete"
-            color="secondary"
-            onClick={toggleVideoStatus}
-          >
-            {showVideo ? (
-              <PauseCircleFilledIcon className={classes.btn} />
+      <ListItem
+        style={{ display: width < 600 ? "block" : "flex" }}
+        id={item._id}
+      >
+        <div>
+          {/* <ListItemIcon>
+            {isVideo ? (
+              <YouTubeIcon className={classes.itemIcon} />
+            ) : isArticle ? (
+              <DescriptionIcon className={classes.itemIcon} />
             ) : (
-              <PlayCircleFilledIcon className={classes.btn} />
+              ""
             )}
-          </IconButton>
-        ) : null}
+          </ListItemIcon> */}
+          {/* <ListItemText id="switch-list-label-wifi" primary="Wi-Fi" /> */}
+          {showVideo ? (
+            <ReactPlayer
+              width={250}
+              height={150}
+              playing={true}
+              url={item.link}
+            />
+          ) : (
+            <p>{item.title ? item.title : item.link}</p>
+          )}
+        </div>
 
-        {isYoutubeUrl(item.link) && isVideo ? (
+        <div style={{ display: "flex" }}>
+          {isVideo ? (
+            <IconButton
+              aria-label="delete"
+              color="secondary"
+              onClick={toggleVideoStatus}
+            >
+              {showVideo ? (
+                <PauseCircleFilledIcon className={classes.btn} />
+              ) : (
+                <PlayCircleFilledIcon className={classes.btn} />
+              )}
+            </IconButton>
+          ) : null}
+
+          {isYoutubeUrl(item.link) && isVideo ? (
+            <IconButton
+              aria-label="delete"
+              color="secondary"
+              onClick={() => openLink(item.link)}
+            >
+              <GetAppIcon className={classes.btn} />
+            </IconButton>
+          ) : null}
+
           <IconButton
             aria-label="delete"
             color="secondary"
             onClick={() => openLink(item.link)}
           >
-            <GetAppIcon className={classes.btn} />
+            <OpenInNewIcon className={classes.btn} />
           </IconButton>
-        ) : null}
 
-        <IconButton
-          aria-label="delete"
-          color="secondary"
-          onClick={() => openLink(item.link)}
-        >
-          <OpenInNewIcon className={classes.btn} />
-        </IconButton>
-
-        <IconButton
-          aria-label="delete"
-          color="secondary"
-          onClick={handleDeleteItem}
-        >
-          <DeleteIcon className={classes.btn} />
-        </IconButton>
+          <IconButton
+            aria-label="delete"
+            color="secondary"
+            onClick={handleDeleteItem}
+          >
+            <DeleteIcon className={classes.btn} />
+          </IconButton>
+        </div>
       </ListItem>
     </div>
   );

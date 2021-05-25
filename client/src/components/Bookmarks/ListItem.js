@@ -45,7 +45,8 @@ const Item = ({ isAuthor, item }) => {
   const isArticle = item.type === "article" ? true : false;
 
   const isYoutubeUrl = (url) => {
-    const regex = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    const regex =
+      /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
     if (url.match(regex)) {
       return true;
     }
@@ -79,14 +80,14 @@ const Item = ({ isAuthor, item }) => {
       >
         <div>
           {/* <ListItemIcon>
-              {isVideo ? (
-                <YouTubeIcon className={classes.itemIcon} />
-              ) : isArticle ? (
-                <DescriptionIcon className={classes.itemIcon} />
-              ) : (
-                ""
-              )}
-            </ListItemIcon> */}
+            {isVideo ? (
+              <YouTubeIcon className={classes.itemIcon} />
+            ) : isArticle ? (
+              <DescriptionIcon className={classes.itemIcon} />
+            ) : (
+              ""
+            )}
+          </ListItemIcon> */}
           {/* <ListItemText id="switch-list-label-wifi" primary="Wi-Fi" /> */}
           {showVideo ? (
             <ReactPlayer
@@ -100,7 +101,7 @@ const Item = ({ isAuthor, item }) => {
           )}
         </div>
 
-        <div style={{ display: "flex" }}>
+        <div>
           {isVideo ? (
             <IconButton
               aria-label="delete"

@@ -8,7 +8,7 @@ import Item from "./ListItem";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: 700,
+    maxWidth: 650,
     backgroundColor: theme.palette.primary.main,
     border: '1px solid #222222',
     borderRadius: 2

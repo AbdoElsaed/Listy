@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Lists from "./components/PublicLists/Lists";
 import PrivateLists from "./components/PrivateLists/Lists";
+import Bookmarks from "./components/Bookmarks/Lists";
 
 
 import AppBar from "./components/AppBar";
@@ -48,6 +49,7 @@ export default function App() {
             <Route path="/login" component={Login} exact />
             <Route path="/register" component={Register} exact />
             <ProtectedRoute path="/profile" component={Profile} exact />
+            <ProtectedRoute path="/bookmarks" component={Bookmarks} exact />
           </Switch>
           <AddFabBtn />
         </AuthProvider>

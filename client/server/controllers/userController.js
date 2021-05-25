@@ -132,9 +132,7 @@ exports.unSaveList = async (req, res) => {
 
 exports.getSavedLists = async (req, res) => {
   try {
-    const { savedLists } = await User.findById(req.user._id).populate(
-      "savedLists"
-    );
+    const { savedLists } = await User.findById(req.user._id).populate({ path: 'savedLists', populate: { path: 'items' } });
     return res.status(200).json({ savedLists });
   } catch (err) {
     console.log(err);

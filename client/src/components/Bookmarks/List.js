@@ -78,8 +78,13 @@ const List = ({ list }) => {
   const [isPublic, setIsPublic] = useState(list.public);
   const [saved, setSaved] = useState();
 
-  const { user, refreshLists, isAuthenticated, savedLists, refreshSavedLists } =
-    useAuth();
+  const {
+    user,
+    refreshLists,
+    isAuthenticated,
+    savedLists,
+    refreshSavedLists,
+  } = useAuth();
   const isAuthor = isAuthenticated ? isListAuthor(list, user._id) : false;
 
   useEffect(() => {
@@ -141,19 +146,15 @@ const List = ({ list }) => {
 
         <div className={classes.tagsContainer}>
           {list.tags
-            ? list.tags.map((tag) =>
-                tag ? (
-                  <Chip
-                    className={classes.tag}
-                    color=""
-                    variant="outlined"
-                    size="small"
-                    label={tag}
-                  />
-                ) : (
-                  ""
-                )
-              )
+            ? list.tags.map((tag) => (
+                <Chip
+                  className={classes.tag}
+                  color=""
+                  variant="outlined"
+                  size="small"
+                  label={tag}
+                />
+              ))
             : null}
         </div>
 

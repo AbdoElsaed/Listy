@@ -97,6 +97,14 @@ export const AuthProvider = ({ children }) => {
     setMyLists(lists);
   };
 
+  const filterSavedLists = async (tag) => {
+    if (!tag) {
+      return await refreshSavedLists();
+    }
+    const lists = savedLists.filter((list) => list.tags.includes(tag));
+    setSavedLists(lists);
+  };
+
   // logout
   const logout = useCallback(() => {
     localStorage.removeItem("listyUser");
@@ -125,7 +133,8 @@ export const AuthProvider = ({ children }) => {
         avatar,
         setAvatar,
         savedLists,
-        refreshSavedLists
+        refreshSavedLists,
+        filterSavedLists
       }}
     >
       {children}

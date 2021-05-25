@@ -43,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
     borderRadius: 10,
     // height: 400,
+    [theme.breakpoints.down('sm')]: {
+      width: 300,
+    },
     // width: 600,
     // maxWidth: 300,
     outline: "none",
@@ -52,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
       marginTop: theme.spacing(3),
       width: "45ch",
+      [theme.breakpoints.down('sm')]: {
+        width: "30ch"
+      },
       //   backgroundColor: theme.palette.primary.dark,
       padding: 3,
       borderRadius: 2,

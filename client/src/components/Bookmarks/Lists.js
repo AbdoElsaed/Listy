@@ -5,7 +5,7 @@ import Divider from "@material-ui/core/Divider";
 
 import { TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
-import PublicIcon from '@material-ui/icons/Public';
+import BookmarksIcon from '@material-ui/icons/Bookmarks';
 
 import { Link } from "react-router-dom";
 import { Grid } from "@material-ui/core";
@@ -54,33 +54,30 @@ const Lists = () => {
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState([]);
 
-  const { publicLists, filterPublicLists } = useAuth();
+  const { filterSavedLists, savedLists } = useAuth();
 
   useEffect(() => {
     (async () => {
       let data = [];
-      const d = publicLists.map((list) => list.tags);
+      const d = savedLists.map((list) => list.tags);
       d.map((item) => {
-        data.push(...item);
+        return data.push(...item);
       });
 
       setTags(data);
-      console.log("data", data);
-      console.log("tags", tags);
-      console.log("publicLists", publicLists);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [publicLists]);
+  }, [savedLists]);
 
   const handleOnChange = async (v) => {
     setTag(v);
-    await filterPublicLists(v);
+    await filterSavedLists(v);
   };
 
   return (
     <Container maxWidth="md">
       <div className={classes.root}>
-        <h2 className={classes.header}> <PublicIcon style={{ verticalAlign: 'top'}} /> Public Lists</h2>
+        <h2 className={classes.header}> <BookmarksIcon style={{ verticalAlign: 'top'}} /> Bookmarks </h2>
 
         <Grid container className={classes.parentGrid}>
           <Grid item>
@@ -112,8 +109,8 @@ const Lists = () => {
           </Grid> */}
         </Grid>
 
-        {publicLists.length > 0
-          ? publicLists.map((list) => (
+        {savedLists.length > 0
+          ? savedLists.map((list) => (
               <div key={list._id}>
                 <List list={list} /> <Divider style={{ marginBottom: 1 }} />
               </div>
