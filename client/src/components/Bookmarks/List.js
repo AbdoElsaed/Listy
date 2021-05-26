@@ -160,7 +160,7 @@ const List = ({ list }) => {
 
         <AccordionActions>
           {isAuthor ? (
-            <>
+            <div>
               <FormControlLabel
                 className={classes.switch}
                 control={
@@ -184,7 +184,7 @@ const List = ({ list }) => {
               >
                 <DeleteIcon />
               </IconButton>
-            </>
+            </div>
           ) : null}
 
           <IconButton
