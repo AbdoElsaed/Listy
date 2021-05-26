@@ -13,31 +13,31 @@ const Routes = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <>
+    <div>
       <CssBaseline />
       <AppBar />
 
       {isAuthenticated ? (
-        <>
+        <div>
           <Route>
             <Switch>
               <Route path="/" component={Lists} exact />
             </Switch>
           </Route>
-        </>
+        </div>
       ) : (
-        <>
+        <div>
           <Route>
             <Switch>
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
             </Switch>
           </Route>
-        </>
+        </div>
       )}
 
       <AddFabBtn />
-    </>
+    </div>
   );
 };
 

@@ -230,7 +230,7 @@ const AvatarEditor = ({ open, setOpen, handleOpen, handleClose }) => {
                         </div>
                       </div>
                     ) : (
-                      <>
+                      <div>
                         <div className={classes.cloudIconContainer}>
                           <CloudUploadIcon className={classes.cloudIcon} />
                           <p className={classes.dragLine}>
@@ -241,7 +241,7 @@ const AvatarEditor = ({ open, setOpen, handleOpen, handleClose }) => {
                         <br />
 
                         <h5>OR</h5>
-                      </>
+                      </div>
                     )}
 
                     <br />
