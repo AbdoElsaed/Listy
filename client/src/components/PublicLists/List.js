@@ -70,6 +70,24 @@ const useStyles = makeStyles((theme) => ({
     // backgroundColor: '#1a1a1c',
     fontWeight: "bold",
   },
+  createdby: {
+    display: 'flex',
+    alignItems: 'center',
+    border: '1px solid #444',
+    padding: '5px 8px',
+    borderRadius: 30,
+    boxShadow: '2px 1px 3px #333',
+    cursor: 'pointer'
+  },
+  createdByImg: {
+    width: 35,
+    height: 35,
+    borderRadius: '50%',
+  },
+  createdByText: {
+    marginRight: 5,
+    color: '#CCC'
+  }
 }));
 
 const List = ({ list }) => {
@@ -81,6 +99,7 @@ const List = ({ list }) => {
   const { user, refreshLists, isAuthenticated, savedLists, refreshSavedLists } =
     useAuth();
   const isAuthor = isAuthenticated ? isListAuthor(list, user._id) : false;
+  console.log("isAuthor", isAuthor);
 
   useEffect(() => {
     const check = savedLists.find((l) => l._id === list._id);
@@ -157,43 +176,50 @@ const List = ({ list }) => {
             : null}
         </div>
 
-        <AccordionActions>
-          {isAuthor ? (
-            <div>
-              <FormControlLabel
-                className={classes.switch}
-                control={
-                  <Switch
-                    size="small"
-                    checked={isPublic}
-                    onChange={handleSwitchChange}
-                    name="public"
-                    color="secondary"
-                  />
-                }
-                label="Public"
-              />
+        <AccordionActions style={{ justifyContent: "space-between" }}>
+          <div className={classes.createdby}>
+            <span className={classes.createdByText}> {list.creator.name} </span>
+            <img className={classes.createdByImg} src={list.creator.avatar.location} alt="list creator avatar"></img>
+          </div>
 
-              <IconButton
-                color="secondary"
-                size="small"
-                aria-label="delete"
-                className={classes.deleteBtn}
-                onClick={handleDeleteList}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </div>
-          ) : null}
+          <div style={{ display: 'flex' }}>
+            {isAuthor ? (
+              <div>
+                <FormControlLabel
+                  className={classes.switch}
+                  control={
+                    <Switch
+                      size="small"
+                      checked={isPublic}
+                      onChange={handleSwitchChange}
+                      name="public"
+                      color="secondary"
+                    />
+                  }
+                  label="Public"
+                />
 
-          <IconButton
-            aria-label="save"
-            color="secondary"
-            size="small"
-            onClick={handleSaveList}
-          >
-            {saved ? <BookmarkIcon /> : <BookmarkBorderIcon />}
-          </IconButton>
+                <IconButton
+                  color="secondary"
+                  size="small"
+                  aria-label="delete"
+                  className={classes.deleteBtn}
+                  onClick={handleDeleteList}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </div>
+            ) : null}
+
+            <IconButton
+              aria-label="save"
+              color="secondary"
+              size="small"
+              onClick={handleSaveList}
+            >
+              {saved ? <BookmarkIcon /> : <BookmarkBorderIcon />}
+            </IconButton>
+          </div>
         </AccordionActions>
       </Accordion>
     </div>

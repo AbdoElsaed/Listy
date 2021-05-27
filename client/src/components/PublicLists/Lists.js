@@ -61,7 +61,7 @@ const Lists = () => {
       let data = [];
       const d = publicLists.map((list) => list.tags);
       d.map((item) => {
-        data.push(...item);
+        return data.push(...item);
       });
 
       setTags(data);

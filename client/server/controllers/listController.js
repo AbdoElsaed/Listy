@@ -37,7 +37,7 @@ exports.getAllLists = async (req, res) => {
 
 exports.getPublicLists = async (req, res) => {
   try {
-    const lists = await List.find({ public: true }).populate("items");
+    const lists = await List.find({ public: true }).populate("items").populate("creator");
     res.status(200).json(lists);
   } catch (err) {
     console.log(err);

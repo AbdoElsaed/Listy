@@ -1,0 +1,2 @@
+https://dev.to/shadid12/how-to-deploy-your-node-js-app-on-aws-with-nginx-and-ssl-3p5l
+https://futurestud.io/tutorials/pm2-use-npm-to-start-your-app#:~:text=To%20simulate%20the%20npm%20start,allowed%20options%20and%20advanced%20features.

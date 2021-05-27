@@ -154,12 +154,12 @@ export default function UserMenu() {
                 <ListItemText primary="Bookmarks" />
               </StyledMenuItem>
             </Link>
-            <StyledMenuItem onClick={handleClose}>
+            {/* <StyledMenuItem onClick={handleClose}>
               <ListItemIcon className={classes.icon}>
                 <SettingsIcon />
               </ListItemIcon>
               <ListItemText primary="Settings" />
-            </StyledMenuItem>
+            </StyledMenuItem> */}
             <StyledMenuItem onClick={handleLogout}>
               <ListItemIcon className={classes.icon}>
                 <ExitToAppIcon />
@@ -175,6 +175,14 @@ export default function UserMenu() {
                   <ExitToAppIcon />
                 </ListItemIcon>
                 <ListItemText primary="Log In" />
+              </StyledMenuItem>
+            </Link>
+            <Link className={classes.link} to="/register">
+              <StyledMenuItem onClick={handleLogin}>
+                <ListItemIcon className={classes.icon}>
+                  <ExitToAppIcon />
+                </ListItemIcon>
+                <ListItemText primary="Sign Up" />
               </StyledMenuItem>
             </Link>
           </div>
