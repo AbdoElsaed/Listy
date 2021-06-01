@@ -1,4 +1,4 @@
-import { useRef, forwardRef, useCallback, useState } from "react";
+import React, { useRef, forwardRef, useCallback, useState } from "react";
 import ReactAvatarEditor from "react-avatar-editor";
 import Dropzone from "react-dropzone";
 
