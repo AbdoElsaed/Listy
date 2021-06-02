@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import clsx from "clsx";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionActions from "@material-ui/core/AccordionActions";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Chip from "@material-ui/core/Chip";
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
@@ -78,13 +75,8 @@ const List = ({ list }) => {
   const [isPublic, setIsPublic] = useState(list.public);
   const [saved, setSaved] = useState();
 
-  const {
-    user,
-    refreshLists,
-    isAuthenticated,
-    savedLists,
-    refreshSavedLists,
-  } = useAuth();
+  const { user, refreshLists, isAuthenticated, savedLists, refreshSavedLists } =
+    useAuth();
   const isAuthor = isAuthenticated ? isListAuthor(list, user._id) : false;
 
   useEffect(() => {
@@ -146,15 +138,19 @@ const List = ({ list }) => {
 
         <div className={classes.tagsContainer}>
           {list.tags
-            ? list.tags.map((tag) => (
-                <Chip
-                  className={classes.tag}
-                  color=""
-                  variant="outlined"
-                  size="small"
-                  label={tag}
-                />
-              ))
+            ? list.tags.map((tag) =>
+                tag ? (
+                  <Chip
+                    className={classes.tag}
+                    color=""
+                    variant="outlined"
+                    size="small"
+                    label={tag}
+                  />
+                ) : (
+                  ""
+                )
+              )
             : null}
         </div>
 

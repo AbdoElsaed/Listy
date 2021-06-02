@@ -6,7 +6,6 @@ import Divider from "@material-ui/core/Divider";
 import { TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 
-import { Link } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 
 import List from "./List";
@@ -61,13 +60,10 @@ const Lists = () => {
       let data = [];
       const d = myLists.map((list) => list.tags);
       d.map((item) => {
-        data.push(...item);
+        return data.push(...item);
       });
-
-      setTags(data);
-      console.log("data", data);
-      console.log("tags", tags);
-      console.log("myLists", myLists);
+      const uniqueData = data.filter(e => e);
+      setTags(uniqueData);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myLists]);

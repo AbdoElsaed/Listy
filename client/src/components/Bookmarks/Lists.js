@@ -7,7 +7,6 @@ import { TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import BookmarksIcon from '@material-ui/icons/Bookmarks';
 
-import { Link } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 
 import List from "./List";
@@ -63,8 +62,8 @@ const Lists = () => {
       d.map((item) => {
         return data.push(...item);
       });
-
-      setTags(data);
+      const uniqueData = data.filter(e => e);
+      setTags(uniqueData);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [savedLists]);

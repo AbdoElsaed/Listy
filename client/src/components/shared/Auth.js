@@ -4,7 +4,6 @@ import React, {
   useEffect,
   useContext,
   useCallback,
-  useRef,
 } from "react";
 
 import { getPublicLists, getMyLists, getAvatar, getSavedLists } from "../../utils/api";

@@ -7,7 +7,6 @@ import { TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import PublicIcon from '@material-ui/icons/Public';
 
-import { Link } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 
 import List from "./List";
@@ -51,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 const Lists = () => {
   const classes = useStyles();
 
-  const [tag, setTag] = useState("");
+  const [tag, setTag] = useState();
   const [tags, setTags] = useState([]);
 
   const { publicLists, filterPublicLists } = useAuth();
@@ -64,10 +63,8 @@ const Lists = () => {
         return data.push(...item);
       });
 
-      setTags(data);
-      console.log("data", data);
-      console.log("tags", tags);
-      console.log("publicLists", publicLists);
+      const uniqueData = data.filter(e => e);
+      setTags(uniqueData);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [publicLists]);
