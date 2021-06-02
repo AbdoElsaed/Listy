@@ -179,7 +179,7 @@ const List = ({ list }) => {
         <AccordionActions style={{ justifyContent: "space-between" }}>
           <div className={classes.createdby}>
             <span className={classes.createdByText}> {list.creator.name} </span>
-            <img className={classes.createdByImg} src={list.creator.avatar.location} alt="list creator avatar"></img>
+            <img className={classes.createdByImg} src={list.creator.avatar? list.creator.avatar.location : '/anon.png'} alt="list creator avatar"></img>
           </div>
 
           <div style={{ display: 'flex' }}>

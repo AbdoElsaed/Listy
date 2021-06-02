@@ -124,6 +124,18 @@ export const getAvatar = async (token) => {
   return avatar;
 };
 
+export const deleteAvatar = async (token) => {
+  const res = await fetch(`${API}/user/avatar`, {
+    method: "DELETE",
+    headers: {
+      Authorization: token,
+    },
+  });
+
+  const user = await res.json();
+  return user;
+};
+
 export const deleteItem = async ({ token, id }) => {
   const res = await fetch(`${API}/item/${id}`, {
     method: "DELETE",

@@ -132,8 +132,25 @@ exports.unSaveList = async (req, res) => {
 
 exports.getSavedLists = async (req, res) => {
   try {
-    const { savedLists } = await User.findById(req.user._id).populate({ path: 'savedLists', populate: { path: 'items' } });
+    const { savedLists } = await User.findById(req.user._id).populate({
+      path: "savedLists",
+      populate: { path: "items" },
+    });
     return res.status(200).json({ savedLists });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send(err);
+  }
+};
+
+exports.deleteAvatar = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { $set: { avatar: null } },
+      { new: true }
+    );
+    return res.status(200).json(user);
   } catch (err) {
     console.log(err);
     return res.status(400).send(err);

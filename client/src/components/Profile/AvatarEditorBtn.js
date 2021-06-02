@@ -1,11 +1,16 @@
 import React, { useCallback, useRef, useState } from "react";
 
 import CameraAltIcon from "@material-ui/icons/CameraAlt";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 import { makeStyles } from "@material-ui/core/styles";
+import { useSnackbar } from "notistack";
 
 import { useAuth } from "../shared/Auth";
 import AvatarEditor from "../modals/AvatarEditor";
+
+import { deleteAvatar } from "../../utils/api";
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -30,20 +35,53 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 28,
     opacity: 0.8,
   },
+  menu: {
+    marginTop: 38,
+    marginLeft: 10,
+  },
 }));
 
 const AvatarEditorBtn = () => {
   const classes = useStyles();
-  const { isAuthenticated, avatar } = useAuth();
+  const { avatar, setAvatar } = useAuth();
 
   const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
 
   const handleOpen = () => {
     setOpen(true);
+    handleCloseMenu();
   };
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const removeAvatar = async () => {
+    let token = JSON.parse(localStorage.getItem("token"));
+    const user = await deleteAvatar(token);
+    console.log('userrrr after remove', user);
+    if(user && !user.avatar) {
+      handleCloseMenu();
+      setAvatar(null);
+      enqueueSnackbar("avatar deleted successfully!", {
+        variant: "success",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "center",
+        },
+      });
+    }
   };
 
   return (
@@ -52,10 +90,21 @@ const AvatarEditorBtn = () => {
         <CameraAltIcon
           aria-controls="simple-menu"
           aria-haspopup="true"
-          onClick={handleOpen}
+          onClick={avatar ? handleClick : handleOpen}
           color="primary"
           className={classes.avatarEditIcon}
         ></CameraAltIcon>
+        <Menu
+          className={classes.menu}
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleCloseMenu}
+        >
+          <MenuItem onClick={handleOpen}>edit avatar</MenuItem>
+          <MenuItem onClick={removeAvatar}>remove avatar</MenuItem>
+        </Menu>
         <img
           className={classes.avatar}
           alt="avatar"

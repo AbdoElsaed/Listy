@@ -10,6 +10,7 @@ router.post("/login", userController.login);
 router.put("/", authenticate, userController.edit);
 router.get("/avatar", authenticate, userController.getAvatar);
 router.post("/avatar", [authenticate, publicUpload.single("avatar")], userController.addAvatar);
+router.delete("/avatar", authenticate, userController.deleteAvatar);
 router.post("/saveList", authenticate, userController.saveList);
 router.post("/unSaveList", authenticate, userController.unSaveList);
 router.get("/savedLists", authenticate, userController.getSavedLists);
