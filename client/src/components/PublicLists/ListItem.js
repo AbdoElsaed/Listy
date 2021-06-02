@@ -15,7 +15,7 @@ import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import { deleteItem } from "../../utils/api";
+import { deleteItem, downloadYtVideo } from "../../utils/api";
 import { useAuth } from "../shared/Auth";
 import useWindowSize from "../../utils/useWindowSize";
 
@@ -59,6 +59,11 @@ const Item = ({ isAuthor, item }) => {
   const openLink = (link) => {
     window.open(link, "_blank");
   };
+
+  const downloadVideo = async (url) => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    await downloadYtVideo(url, token)
+  }
 
   const handleDeleteItem = async () => {
     const token = JSON.parse(localStorage.getItem("token"));
@@ -117,16 +122,16 @@ const Item = ({ isAuthor, item }) => {
 
           {isYoutubeUrl(item.link) && isVideo ? (
             <IconButton
-              aria-label="delete"
+              aria-label="download"
               color="secondary"
-              onClick={() => openLink(item.link)}
+              onClick={() => downloadVideo(item.link)}
             >
               <GetAppIcon className={classes.btn} />
             </IconButton>
           ) : null}
 
           <IconButton
-            aria-label="delete"
+            aria-label="OpenInNewIcon"
             color="secondary"
             onClick={() => openLink(item.link)}
           >

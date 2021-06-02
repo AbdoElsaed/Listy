@@ -201,3 +201,15 @@ export const getSavedLists = async (token) => {
   const { savedLists } = await res.json();
   return savedLists;
 };
+
+export const downloadYtVideo = async (url, token) => {
+  // const res = await fetch(`${API}/item/yt?url=${url}`, {
+  //   method: "GET",
+  //   headers: {
+  //     Authorization: token,
+  //   },
+  // });
+
+  window.location.href=`${API}/item/yt?url=${url}`;
+
+}

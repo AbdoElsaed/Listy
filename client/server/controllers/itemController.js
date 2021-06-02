@@ -1,5 +1,6 @@
 const axios = require("axios").default;
 const cheerio = require("cheerio");
+const ytdl = require('ytdl-core');
 
 const { Item } = require("../db/models/item");
 const { List } = require("../db/models/list");
@@ -74,3 +75,18 @@ exports.deleteItem = async (req, res) => {
     return res.status(400).send(err);
   }
 };
+
+exports.downloadVideo = async (req, res) => {
+  try {
+
+    const url = req.query.url;
+    res.header("Content-Disposition", 'attachment; filename="video.mp4"');
+    return await ytdl(url, {
+      format: "mp4",
+    }).pipe(res);
+    
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send(err);
+  }
+}
