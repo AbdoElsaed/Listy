@@ -14,9 +14,9 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormLabel from "@material-ui/core/FormLabel";
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { useSnackbar } from "notistack";
 import { Typography } from "@material-ui/core";
-
-import { getMyLists } from "../../utils/api"
 
 import Autocomplete, {
   createFilterOptions,
@@ -98,7 +98,10 @@ const AddItem = ({ open, setOpen, handleOpen, handleClose }) => {
   const [showTitleErr, setShowTitleErr] = useState(false);
   const [type, setType] = useState("video");
   const [listsTitles, setListsTitles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { myLists, refreshLists } = useAuth();
 
   useEffect(() => {
@@ -145,6 +148,9 @@ const AddItem = ({ open, setOpen, handleOpen, handleClose }) => {
       return;
     }
 
+    setLoading(true);
+    setDisabled(true)
+
     const data = {
       link,
       list: list.title,
@@ -156,6 +162,15 @@ const AddItem = ({ open, setOpen, handleOpen, handleClose }) => {
     const item = await addItem({ data, token })
     if(item) {
       handleCloseModal();
+      setLoading(false);
+      setDisabled(false)
+      enqueueSnackbar("item added successfully!", {
+        variant: "success",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "center",
+        },
+      });
       await refreshLists();
     }
 
@@ -312,9 +327,11 @@ const AddItem = ({ open, setOpen, handleOpen, handleClose }) => {
                 variant="contained"
                 color="primary"
                 onClick={onSubmit}
+                disabled={disabled}
               >
                 Add
               </Button>
+              {loading? <CircularProgress style={{ color: '#DDD', width: '50px', height: '50px' }} /> : null}
             </form>
           </div>
         </Fade>

@@ -9,6 +9,8 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import Button from "@material-ui/core/Button";
 
 import { Typography } from "@material-ui/core";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { useSnackbar } from "notistack";
 
 import { EditUser } from "../../utils/api";
 import { useAuth } from "../shared/Auth";
@@ -82,12 +84,18 @@ const AddList = ({ open, setOpen, handleOpen, handleClose }) => {
   const [lastName, setLastName] = useState(user && user.lastName);
   const [email, setEmail] = useState(user && user.email);
   const [gender, setGender] = useState(user && user.gender);
+  const [loading, setLoading] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const handleCloseModal = () => {
     handleClose();
   };
 
   const onSubmit = async () => {
+    setLoading(true);
+    setDisabled(true)
     const data = {
       firstName,
       lastName,
@@ -99,6 +107,15 @@ const AddList = ({ open, setOpen, handleOpen, handleClose }) => {
     const user = await EditUser({ data, token });
 
     if (user) {
+      setLoading(false);
+      setDisabled(false)
+      enqueueSnackbar("profile edited successfully!", {
+        variant: "success",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "center",
+        },
+      });
       handleCloseModal();
       setUser(user);
     }
@@ -200,6 +217,7 @@ const AddList = ({ open, setOpen, handleOpen, handleClose }) => {
               />
 
               <Button
+                disabled={disabled}
                 className={classes.btn}
                 variant="contained"
                 color="primary"
@@ -207,6 +225,7 @@ const AddList = ({ open, setOpen, handleOpen, handleClose }) => {
               >
                 Edit
               </Button>
+              {loading? <CircularProgress style={{ color: '#DDD', width: '50px', height: '50px' }} /> : null}
             </form>
           </div>
         </Fade>

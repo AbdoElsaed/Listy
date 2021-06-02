@@ -9,6 +9,8 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 
 import { Typography } from "@material-ui/core";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { useSnackbar } from "notistack";
 
 import { EditAvatar } from "../../utils/api";
 import { useAuth } from "../shared/Auth";
@@ -92,6 +94,11 @@ const AvatarEditor = ({ open, setOpen, handleOpen, handleClose }) => {
   const [resultImg, setResultImg] = useState("");
   const [resultImgFile, setResultImgFile] = useState("");
 
+  const [loading, setLoading] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
   //   const { loading, run: runUpdateAvatar } = usePut({
   //     url: "users/avatar",
   //     successMessage: (res) => t("avatarUpdated"),
@@ -148,6 +155,8 @@ const AvatarEditor = ({ open, setOpen, handleOpen, handleClose }) => {
   };
 
   const onSubmit = useCallback(async () => {
+    setLoading(true);
+    setDisabled(true)
     let files = {};
     // resultImg ? files['croppedImgBlob'] = resultImg : null;
     resultImgFile
@@ -164,6 +173,15 @@ const AvatarEditor = ({ open, setOpen, handleOpen, handleClose }) => {
     const avatar = await EditAvatar({ formData, token });
     if (avatar) {
       setAvatar(avatar);
+      setLoading(false);
+      setDisabled(false)
+      enqueueSnackbar("image added successfully!", {
+        variant: "success",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "center",
+        },
+      });
       handleClose();
     }
   }, [image, resultImg, resultImgFile]);
@@ -266,6 +284,7 @@ const AvatarEditor = ({ open, setOpen, handleOpen, handleClose }) => {
               <div>
                 {image || resultImg || resultImgFile ? (
                   <Button
+                    disabled={disabled}
                     onClick={onSubmit}
                     variant="contained"
                     size="small"
@@ -275,6 +294,7 @@ const AvatarEditor = ({ open, setOpen, handleOpen, handleClose }) => {
                     Update
                   </Button>
                 ) : null}
+                {loading? <CircularProgress style={{ color: '#DDD', width: '50px', height: '50px' }} /> : null}
               </div>
             </div>
           </div>

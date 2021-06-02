@@ -10,6 +10,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 
 import { Typography } from "@material-ui/core";
+import { useSnackbar } from "notistack";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { addList } from "../../utils/api";
 import { useAuth } from "../shared/Auth";
@@ -29,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
     borderRadius: 10,
     // height: 400,
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       width: 300,
     },
     // maxWidth: 400,
@@ -40,8 +42,8 @@ const useStyles = makeStyles((theme) => ({
     "& > *": {
       margin: theme.spacing(1),
       width: "45ch",
-      [theme.breakpoints.down('sm')]: {
-        width: "30ch"
+      [theme.breakpoints.down("sm")]: {
+        width: "30ch",
       },
       // backgroundColor: theme.palette.primary.dark,
       padding: 3,
@@ -82,7 +84,10 @@ const AddList = ({ open, setOpen, handleOpen, handleClose }) => {
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
   const [showTitleErr, setShowTitleErr] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { refreshLists } = useAuth();
 
   const handleSwitchChange = () => {
@@ -123,6 +128,9 @@ const AddList = ({ open, setOpen, handleOpen, handleClose }) => {
       return;
     }
 
+    setLoading(true);
+    setDisabled(true)
+
     const data = {
       title,
       description,
@@ -134,6 +142,15 @@ const AddList = ({ open, setOpen, handleOpen, handleClose }) => {
     const list = await addList({ data, token });
     if (list) {
       handleCloseModal();
+      setLoading(false);
+      setDisabled(false)
+      enqueueSnackbar("list added successfully!", {
+        variant: "success",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "center",
+        },
+      });
       await refreshLists();
     }
   };
@@ -236,9 +253,11 @@ const AddList = ({ open, setOpen, handleOpen, handleClose }) => {
                 variant="contained"
                 color="primary"
                 onClick={onSubmit}
+                disabled={disabled}
               >
                 Add
               </Button>
+              {loading? <CircularProgress style={{ color: '#DDD', width: '50px', height: '50px' }} /> : null}
             </form>
           </div>
         </Fade>

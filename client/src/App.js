@@ -2,13 +2,13 @@ import React from "react";
 import { CssBaseline } from "@material-ui/core";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
+import { SnackbarProvider } from "notistack";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Lists from "./components/PublicLists/Lists";
 import PrivateLists from "./components/PrivateLists/Lists";
 import Bookmarks from "./components/Bookmarks/Lists";
-
 
 import AppBar from "./components/AppBar";
 import AddFabBtn from "./components/AddFabBtn";
@@ -39,22 +39,24 @@ const darkTheme = createMuiTheme({
 
 export default function App() {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <Router>
-        <AuthProvider>
-          <CssBaseline />
-          <AppBar />
-          <Switch>
-            <Route path="/" component={Lists} exact />
-            <ProtectedRoute path="/lists" component={PrivateLists} exact />
-            <Route path="/login" component={Login} exact />
-            <Route path="/register" component={Register} exact />
-            <ProtectedRoute path="/profile" component={Profile} exact />
-            <ProtectedRoute path="/bookmarks" component={Bookmarks} exact />
-          </Switch>
-          <AddFabBtn />
-        </AuthProvider>
-      </Router>
-    </ThemeProvider>
+    <SnackbarProvider maxSnack={3}>
+      <ThemeProvider theme={darkTheme}>
+        <Router>
+          <AuthProvider>
+            <CssBaseline />
+            <AppBar />
+            <Switch>
+              <Route path="/" component={Lists} exact />
+              <ProtectedRoute path="/lists" component={PrivateLists} exact />
+              <Route path="/login" component={Login} exact />
+              <Route path="/register" component={Register} exact />
+              <ProtectedRoute path="/profile" component={Profile} exact />
+              <ProtectedRoute path="/bookmarks" component={Bookmarks} exact />
+            </Switch>
+            <AddFabBtn />
+          </AuthProvider>
+        </Router>
+      </ThemeProvider>
+    </SnackbarProvider>
   );
 }
