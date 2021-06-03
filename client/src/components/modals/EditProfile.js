@@ -118,6 +118,7 @@ const AddList = ({ open, setOpen, handleOpen, handleClose }) => {
       });
       handleCloseModal();
       setUser(user);
+      localStorage.setItem("listyUser", JSON.stringify(user))
     }
   };
 
