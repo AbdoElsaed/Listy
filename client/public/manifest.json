@@ -7,17 +7,17 @@
       "sizes": "1024x1024"
     },
     {
-      "src": "./imgslogo_64*64.png",
+      "src": "./imgs/logo_64*64.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "./imgslogo_192*192.png",
+      "src": "./imgs/logo_192*192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "./imgslogo_512*512.png",
+      "src": "./imgs/logo_512*512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
