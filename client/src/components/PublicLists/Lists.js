@@ -63,7 +63,7 @@ const Lists = () => {
         return data.push(...item);
       });
 
-      const uniqueData = data.filter(e => e);
+      const uniqueData = [...new Set(data.filter(e => e.toLowerCase()))];
       setTags(uniqueData);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
