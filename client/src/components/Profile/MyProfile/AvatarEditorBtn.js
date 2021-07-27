@@ -7,10 +7,10 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSnackbar } from "notistack";
 
-import { useAuth } from "../shared/Auth";
-import AvatarEditor from "../modals/AvatarEditor";
+import { useAuth } from "../../shared/Auth";
+import AvatarEditor from "../../modals/AvatarEditor";
 
-import { deleteAvatar } from "../../utils/api";
+import { deleteAvatar } from "../../../utils/api";
 
 const useStyles = makeStyles((theme) => ({
   avatar: {

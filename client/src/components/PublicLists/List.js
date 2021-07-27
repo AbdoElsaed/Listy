@@ -14,6 +14,8 @@ import BookmarkIcon from "@material-ui/icons/Bookmark";
 
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import { Link } from "react-router-dom";
+
 
 import { deleteList, editList, saveList, unSaveList } from "../../utils/api";
 import { useAuth } from "../shared/Auth";
@@ -84,6 +86,9 @@ const useStyles = makeStyles((theme) => ({
   createdByText: {
     marginRight: 5,
     color: '#CCC'
+  },
+  creatorLink: {
+    textDecoration: 'none'
   }
 }));
 
@@ -96,7 +101,6 @@ const List = ({ list }) => {
   const { user, refreshLists, isAuthenticated, savedLists, refreshSavedLists } =
     useAuth();
   const isAuthor = isAuthenticated ? isListAuthor(list, user._id) : false;
-  console.log("isAuthor", isAuthor);
 
   useEffect(() => {
     const check = savedLists.find((l) => l._id === list._id);
@@ -174,10 +178,12 @@ const List = ({ list }) => {
         </div>
 
         <AccordionActions style={{ justifyContent: "space-between" }}>
-          <div className={classes.createdby}>
-            <span className={classes.createdByText}> {list.creator.name} </span>
-            <img className={classes.createdByImg} src={list.creator.avatar? list.creator.avatar.location : '/anon.png'} alt="list creator avatar"></img>
-          </div>
+          <Link to={`/${list.creator.uniqueUrl}`} className={classes.creatorLink}>
+            <div className={classes.createdby}>
+              <span className={classes.createdByText}> {list.creator.name} </span>
+              <img className={classes.createdByImg} src={list.creator.avatar? list.creator.avatar.location : '/anon.png'} alt="list creator avatar"></img>
+            </div>
+          </Link>
 
           <div style={{ display: 'flex' }}>
             {isAuthor ? (

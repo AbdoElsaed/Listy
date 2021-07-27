@@ -50,8 +50,9 @@ export default function App() {
               <ProtectedRoute path="/lists" component={PrivateLists} exact />
               <Route path="/login" component={Login} exact />
               <Route path="/register" component={Register} exact />
-              <ProtectedRoute path="/profile" component={Profile} exact />
+              {/* <ProtectedRoute path="/profile" component={Profile} exact /> */}
               <ProtectedRoute path="/bookmarks" component={Bookmarks} exact />
+              <ProtectedRoute path="/:username" component={Profile} exact />
             </Switch>
             <AddFabBtn />
           </AuthProvider>

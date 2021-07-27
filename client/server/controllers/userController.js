@@ -156,3 +156,18 @@ exports.deleteAvatar = async (req, res) => {
     return res.status(400).send(err);
   }
 };
+
+exports.getUserByHandleName = async (req, res) => {
+  try {
+
+    const user = await User.findOne({ uniqueUrl: req.params.handleName });
+
+    if(user) return res.status(200).json(user);
+    
+    return res.status(400).json({ err: 'invalid user name' });
+
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send(err);
+  }
+}

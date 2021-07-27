@@ -14,5 +14,6 @@ router.delete("/avatar", authenticate, userController.deleteAvatar);
 router.post("/saveList", authenticate, userController.saveList);
 router.post("/unSaveList", authenticate, userController.unSaveList);
 router.get("/savedLists", authenticate, userController.getSavedLists);
+router.get("/:handleName", authenticate, userController.getUserByHandleName);
 
 module.exports = router;

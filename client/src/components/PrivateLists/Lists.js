@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 800,
     backgroundColor: theme.palette.background.default,
     marginTop: 50,
-    marginBottom: 50
+    marginBottom: 50,
   },
   header: {
     color: "#CCC",
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     color: "#CCC",
-    fontWeight: 'bold',
+    fontWeight: "bold",
     textDecoration: "none",
     "&:hover": {
       textDecoration: "underline",
@@ -45,33 +45,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Lists = () => {
+const Lists = ({ otherLists }) => {
   const classes = useStyles();
 
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState([]);
+  const [initLists, setInitLists] = useState([]);
+  const [lists, setLists] = useState([]);
 
   const { myLists, filterPrivateLists } = useAuth();
 
-  console.log('myLists', myLists);
-
   useEffect(() => {
     (async () => {
-      let data = [];
-      const d = myLists.map((list) => list.tags);
-      d.map((item) => {
-        return data.push(...item);
-      });
-
-      const uniqueData = [...new Set(data.filter(e => e.toLowerCase()))];
-      setTags(uniqueData);
+      otherLists ? setLists(otherLists) : setLists(myLists);
+      otherLists ? setInitLists(otherLists) : setInitLists(myLists);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [myLists]);
+  }, [myLists, otherLists]);
 
+  //update the tags
+  useEffect(() => {
+    let data = [];
+    const d = lists && lists.map((list) => list.tags);
+    d.map((item) => {
+      return data.push(...item);
+    });
+    const uniqueData = [...new Set(data.filter((e) => e.toLowerCase()))];
+    setTags(uniqueData);
+  }, [myLists, otherLists, lists]);
+
+  //update lists after tags filter
   const handleOnChange = async (v) => {
     setTag(v);
-    await filterPrivateLists(v);
+    if (!v) return setLists(initLists);
+    const l = lists ? lists.filter((list) => list.tags.includes(v)) : [];
+    setLists(l);
   };
 
   return (
@@ -107,8 +115,8 @@ const Lists = () => {
           </Grid> */}
         </Grid>
 
-        {myLists.length > 0
-          ? myLists.map((list) => (
+        {lists.length > 0
+          ? lists.map((list) => (
               <div key={list._id}>
                 <List list={list} /> <Divider style={{ marginBottom: 1 }} />
               </div>

@@ -83,7 +83,6 @@ export default function UserMenu() {
     avatar,
   } = useAuth();
 
-  console.log("user", user);
 
   const history = useHistory();
 
@@ -138,7 +137,7 @@ export default function UserMenu() {
       >
         {isAuthenticated ? (
           <div>
-            <Link className={classes.link} to="/profile">
+            <Link className={classes.link} to={`/${user.uniqueUrl}`}>
               <StyledMenuItem onClick={handleClose}>
                 <ListItemIcon className={classes.icon}>
                   <PersonIcon />

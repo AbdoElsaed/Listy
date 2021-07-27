@@ -1,29 +1,33 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
+import React, { useState, useEffect } from "react";
+import MyProfile from "./MyProfile";
+import OtherProfile from "./OtherProfile";
 
-import Header from "./Header";
-import { Divider } from '@material-ui/core';
+import { getUserByHandle } from "../../utils/api";
 
-import Lists from "../PrivateLists/Lists"
+const Profile = ({ match }) => {
+  const [otherUser, setOtherUser] = useState(null);
+  const [loadingOtherUser, setLoadingOtherUser] = useState(false);
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+  const user = JSON.parse(localStorage.getItem("listyUser"));
+  const currentUser = match.params.username === user.uniqueUrl ? true : false;
 
-  }
-}));
-
-const Profile = () => {
-  const classes = useStyles();
+  useEffect(() => {
+    (async () => {
+      setLoadingOtherUser(true)
+      const handle = match.params?.username;
+      const token = JSON.parse(localStorage.getItem("token"));
+      const result = await getUserByHandle(handle, token);
+      if(result.err && result.err === 'invalid user name') {
+        setOtherUser(null);
+      } else {
+        setOtherUser(result);
+      }
+      setLoadingOtherUser(false)
+    })();
+  }, []);
 
   return (
-    <div className={classes.root}>
-      <Header />
-
-      <Divider variant="middle"/>
-
-      <Lists />
-    </div>
+    <div>{currentUser ? <MyProfile /> : <OtherProfile handle={match.params.username} user={otherUser} loading={loadingOtherUser} />}</div>
   );
 };
 
