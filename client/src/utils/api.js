@@ -225,3 +225,27 @@ export const downloadYtVideo = async (url, token) => {
   window.location.href=`${API}/item/yt?url=${url}`;
 
 }
+
+export const getUserByHandle = async (handle, token) => {
+  const res = await fetch(`${API}/user/${handle}`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  });
+
+  const user = await res.json();
+  return user;
+};
+
+export const getListsForUser = async (handle, token) => {
+  const res = await fetch(`${API}/list/${handle}`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  });
+
+  const lists = await res.json();
+  return lists;
+};
