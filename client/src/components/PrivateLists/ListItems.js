@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ListItems = ({ items }) => {
+const ListItems = ({ items, isAuthor }) => {
   const classes = useStyles();
 
   return (
@@ -28,7 +28,7 @@ const ListItems = ({ items }) => {
         
         {
             items ?
-            items.map(item => ( <Item key={item._id} item={item}/> ))
+            items.map(item => ( <Item key={item._id} isAuthor={isAuthor} item={item}/> ))
             : 'no items found'
         }
 

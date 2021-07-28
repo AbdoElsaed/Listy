@@ -74,7 +74,7 @@ exports.deleteList = async (req, res) => {
 exports.getListsForUser = async (req, res) => {
   try {
     const user = await User.findOne({ uniqueUrl: req.params.username });
-    const lists = await List.find({ creator: user }).populate("items").populate("creator");
+    const lists = await List.find({ creator: user, public: true }).populate("items").populate("creator");
     res.status(200).json(lists);
   } catch (err) {
     console.log(err);

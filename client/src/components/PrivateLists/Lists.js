@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Lists = ({ otherLists }) => {
+const Lists = ({ otherLists, currentUser }) => {
   const classes = useStyles();
 
   const [tag, setTag] = useState("");
@@ -118,7 +118,7 @@ const Lists = ({ otherLists }) => {
         {lists.length > 0
           ? lists.map((list) => (
               <div key={list._id}>
-                <List list={list} /> <Divider style={{ marginBottom: 1 }} />
+                <List currentUser={currentUser} list={list} /> <Divider style={{ marginBottom: 1 }} />
               </div>
             ))
           : "no lists found"}

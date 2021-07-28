@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Item = ({ item }) => {
+const Item = ({ isAuthor, item }) => {
   const classes = useStyles();
   const { width } = useWindowSize();
 
@@ -139,13 +139,15 @@ const Item = ({ item }) => {
             <OpenInNewIcon className={classes.btn} />
           </IconButton>
 
-          <IconButton
-            aria-label="delete"
-            color="secondary"
-            onClick={handleDeleteItem}
-          >
-            <DeleteIcon className={classes.btn} />
-          </IconButton>
+          {isAuthor ? (
+            <IconButton
+              aria-label="delete"
+              color="secondary"
+              onClick={handleDeleteItem}
+            >
+              <DeleteIcon className={classes.btn} />
+            </IconButton>
+          ) : null}
         </div>
       </ListItem>
     </div>
