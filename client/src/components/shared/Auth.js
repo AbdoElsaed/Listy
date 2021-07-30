@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 
-import { getPublicLists, getMyLists, getAvatar, getSavedLists } from "../../utils/api";
+import { getPublicLists, getMyLists, getAvatar, getSavedLists, getFollowersList, getFollowingList } from "../../utils/api";
 
 export const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
@@ -18,6 +18,8 @@ export const AuthProvider = ({ children }) => {
   const [publicLists, setPublicLists] = useState([]);
   const [myLists, setMyLists] = useState([]);
   const [savedLists, setSavedLists] = useState([]);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
 
   // first loading the app make checks
   useEffect(() => {
@@ -35,8 +37,11 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     (async () => {
       await refreshPublicLists();
+      if(!isAuthenticated) return;
       await refreshMyLists();
       await refreshSavedLists();
+      await refreshFollowersList();
+      await refreshFollowingList();
     })();
   }, [isAuthenticated]);
 
@@ -52,6 +57,20 @@ export const AuthProvider = ({ children }) => {
       }
     })();
   }, [user, avatar]);
+
+  // refresh followers list
+  const refreshFollowersList = async () => {
+    let token = JSON.parse(localStorage.getItem("token"));
+    const followersList = await getFollowersList(token, user?._id);
+    setFollowers(followersList);
+  }
+
+  // refresh following list
+  const refreshFollowingList = async () => {
+    let token = JSON.parse(localStorage.getItem("token"));
+    const followingList = await getFollowingList(token, user?._id);
+    setFollowing(followingList);
+  }
 
   // refresh public Lists
   const refreshPublicLists = async () => {
@@ -133,7 +152,11 @@ export const AuthProvider = ({ children }) => {
         setAvatar,
         savedLists,
         refreshSavedLists,
-        filterSavedLists
+        filterSavedLists,
+        followers,
+        following,
+        refreshFollowersList,
+        refreshFollowingList
       }}
     >
       {children}

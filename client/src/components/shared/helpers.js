@@ -21,3 +21,8 @@ export const isListAuthor = (list, userId) => {
 export const isSavedList = (list, user) => {
   return user.savedLists && user.savedLists.includes(list._id) ? true : false;
 };
+
+export const checkFollowing = (following, id) => {
+  const ids = following.map(i => i._id);
+  return ids.includes(id);
+}

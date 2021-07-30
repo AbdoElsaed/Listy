@@ -76,7 +76,7 @@ const genderList = [
   "prefer not to disclose",
 ];
 
-const AddList = ({ open, setOpen, handleOpen, handleClose }) => {
+const EditProfile = ({ open, setOpen, handleOpen, handleClose }) => {
   const classes = useStyles();
   const { user, setUser } = useAuth();
 
@@ -235,4 +235,4 @@ const AddList = ({ open, setOpen, handleOpen, handleClose }) => {
   );
 };
 
-export default AddList;
+export default EditProfile;

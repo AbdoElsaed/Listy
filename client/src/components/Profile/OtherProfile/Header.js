@@ -1,7 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Button from "@material-ui/core/Button";
+import { useSnackbar } from "notistack";
+
+import { followUser, unFollowUser } from "../../../utils/api";
+import { useAuth } from "../../shared/Auth";
+import { checkFollowing } from "../../shared/helpers";
+import FollowLists from "./FollowLists";
+
+import { getFollowersList } from "../../../utils/api";
+import { getFollowingList } from "../../../utils/api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +45,70 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = ({ user }) => {
   const classes = useStyles();
+  const { following: myFollowing, refreshFollowersList, refreshFollowingList } = useAuth();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
+  const [isFollowing, setIsFollowing] = useState(checkFollowing(myFollowing, user._id));
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setIsFollowing(checkFollowing(myFollowing, user._id))
+  }, [myFollowing, followers])
+
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      let token = JSON.parse(localStorage.getItem("token"));
+      const followers = await getFollowersList(token, user._id);
+      const following = await getFollowingList(token, user._id);
+      setFollowers(followers);
+      setFollowing(following);
+      setLoading(false);
+    })();
+  }, []);
+
+  const refreshFollowers = async () => {
+    let token = JSON.parse(localStorage.getItem("token"));
+    const followers = await getFollowersList(token, user._id);
+    setFollowers(followers);
+  }
+
+  // const isFollowing = checkFollowing(following, user._id);
+
+  const handleFollow = async () => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    const result = await followUser(user._id, token);
+    await refreshFollowingList();
+    await refreshFollowers()
+    if(result) {
+      enqueueSnackbar("followed successfully!", {
+        variant: "success",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "center",
+        },
+      });
+    }
+  }
+
+  const handleUnFollow = async () => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    const result = await unFollowUser(user._id, token);
+    await refreshFollowingList();
+    await refreshFollowers()
+    if(result) {
+      enqueueSnackbar("unfollowed successfully!", {
+        variant: "success",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "center",
+        },
+      });
+    }
+  }
 
   return (
     <div className={classes.root}>
@@ -52,11 +124,14 @@ const Header = ({ user }) => {
           color="primary"
           size="small"
           className={classes.button}
-          onClick={() => {}}
+          onClick={isFollowing ? handleUnFollow : handleFollow}
+          id={user._id}
         >
-          Follow
+          { isFollowing ? 'unfollow' : 'follow'}
         </Button>
       </div>
+
+      <FollowLists user={user} followers={followers} following={following} loading={loading}/>
 
     </div>
   );

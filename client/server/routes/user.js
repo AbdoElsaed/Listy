@@ -14,6 +14,10 @@ router.delete("/avatar", authenticate, userController.deleteAvatar);
 router.post("/saveList", authenticate, userController.saveList);
 router.post("/unSaveList", authenticate, userController.unSaveList);
 router.get("/savedLists", authenticate, userController.getSavedLists);
+router.get("/:id/followers", authenticate, userController.getFollowers);
+router.get("/:id/following", authenticate, userController.getFollowing);
 router.get("/:handleName", authenticate, userController.getUserByHandleName);
+router.post("/follow", authenticate, userController.followUser);
+router.post("/unfollow", authenticate, userController.unFollowUser);
 
 module.exports = router;
