@@ -1,5 +1,5 @@
-const API = "/api/v1";
-// const API = "http://localhost:5000/api/v1";
+// const API = "/api/v1";
+const API = "http://localhost:5000/api/v1";
 
 
 export const register = async (user) => {
@@ -248,4 +248,56 @@ export const getListsForUser = async (handle, token) => {
 
   const lists = await res.json();
   return lists;
+};
+
+export const followUser = async (userId, token) => {
+  const res = await fetch(`${API}/user/follow`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+    body: JSON.stringify({ userId }),
+  });
+
+  const user = await res.json();
+  return user;
+};
+
+export const unFollowUser = async (userId, token) => {
+  const res = await fetch(`${API}/user/unfollow`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+    body: JSON.stringify({ userId }),
+  });
+
+  const user = await res.json();
+  return user;
+};
+
+export const getFollowersList = async (token, id) => {
+  const res = await fetch(`${API}/user/${id}/followers`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  });
+
+  const followers = await res.json();
+  return followers;
+};
+
+export const getFollowingList = async (token, id) => {
+  const res = await fetch(`${API}/user/${id}/following`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  });
+
+  const following = await res.json();
+  return following;
 };

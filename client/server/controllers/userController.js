@@ -171,3 +171,81 @@ exports.getUserByHandleName = async (req, res) => {
     return res.status(400).send(err);
   }
 }
+
+exports.followUser = async (req, res) => {
+  try {
+
+    const userToFollow = await User.findByIdAndUpdate(
+      req.body.userId,
+      {
+        $addToSet: { followers: req.user._id },
+      },
+      { new: true }
+    )
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $addToSet: { following: req.body.userId },
+      },
+      { new: true }
+    )
+    
+    return res.status(200).json(user);
+    
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send(err);
+  }
+}
+
+exports.unFollowUser = async (req, res) => {
+  try {
+
+    const userToUnFollow = await User.findByIdAndUpdate(
+      req.body.userId,
+      {
+        $pull: { followers: req.user._id },
+      },
+      { new: true }
+    )
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $pull: { following: req.body.userId },
+      },
+      { new: true }
+    )
+    
+    return res.status(200).json(user);
+    
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send(err);
+  }
+}
+
+exports.getFollowers = async (req, res) => {
+  try {
+
+    const { followers } = await User.findById(req.params.id).populate('followers', 'name firstName lastName avatar uniqueUrl');
+    return res.status(200).json(followers);
+
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send(err);
+  }
+}
+
+exports.getFollowing = async (req, res) => {
+  try {
+
+    const { following } = await User.findById(req.params.id).populate('following', 'name firstName lastName avatar uniqueUrl');
+    return res.status(200).json(following);
+
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send(err);
+  }
+}

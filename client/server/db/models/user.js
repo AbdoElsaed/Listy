@@ -84,6 +84,18 @@ const UserSchema = mongoose.Schema(
         ref: "List",
       },
     ],
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      }
+    ],
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      }
+    ],
     gender: {
       type: String,
       enum: [
@@ -144,6 +156,8 @@ const returnedValues = [
   "lists",
   "savedLists",
   "gender",
+  "followers",
+  "following"
 ];
 
 const User = mongoose.model("User", UserSchema);

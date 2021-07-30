@@ -5,10 +5,9 @@ import Button from "@material-ui/core/Button";
 import EditIcon from "@material-ui/icons/Edit";
 
 import EditProfile from "../../modals/EditProfile";
-
 import AvatarEditorBtn from "./AvatarEditorBtn";
-
 import { useAuth } from "../../shared/Auth";
+import FollowLists from "./FollowLists";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -77,6 +76,8 @@ const Header = () => {
           Edit Profile
         </Button>
       </div>
+
+      <FollowLists />
 
       <EditProfile
         open={open}
