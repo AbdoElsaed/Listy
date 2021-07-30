@@ -1,5 +1,5 @@
-// const API = "/api/v1";
-const API = "http://localhost:5000/api/v1";
+const API = "/api/v1";
+// const API = "http://localhost:5000/api/v1";
 
 
 export const register = async (user) => {
