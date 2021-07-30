@@ -54,7 +54,7 @@ const OtherProfile = ({ handle, user, loading }) => {
       {loadingLists ? (
         <CircularProgress className={classes.spinner} />
       ) : (
-        <Lists otherLists={lists} currentUser={false}/>
+        <Lists otherLists={lists}/>
       )}
     </div>
   ) : (

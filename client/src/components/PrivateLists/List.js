@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Accordion from "@material-ui/core/Accordion";
@@ -9,15 +9,12 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Chip from "@material-ui/core/Chip";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
-import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
-import BookmarkIcon from "@material-ui/icons/Bookmark";
 
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 
-import { deleteList, editList, saveList, unSaveList } from "../../utils/api";
+import { deleteList, editList } from "../../utils/api";
 import { useAuth } from "../shared/Auth";
-import { isListAuthor } from "../shared/helpers";
 
 import ListItems from "./ListItems";
 
@@ -68,20 +65,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const List = ({ currentUser, list }) => {
+const List = ({ list }) => {
   const classes = useStyles();
 
   const [isPublic, setIsPublic] = useState(list.public);
-  const [saved, setSaved] = useState();
 
-  const { user, refreshLists, isAuthenticated, savedLists, refreshSavedLists } = useAuth();
-  const isAuthor = isAuthenticated ? isListAuthor(list, user._id) : false;
-
-  useEffect(() => {
-    const check = savedLists.find((l) => l._id === list._id);
-    setSaved(check ? true : false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [savedLists]);
+  const { refreshLists } = useAuth();
 
   const handleSwitchChange = async () => {
     const token = JSON.parse(localStorage.getItem("token"));
@@ -99,17 +88,6 @@ const List = ({ currentUser, list }) => {
         await refreshLists();
       }
     }
-  };
-
-  const handleSaveList = async () => {
-    const token = JSON.parse(localStorage.getItem("token"));
-    if (saved) {
-      await unSaveList({ token, listId: list._id });
-    } else {
-      await saveList({ token, listId: list._id });
-    }
-    setSaved(!saved);
-    await refreshSavedLists();
   };
 
   return (
@@ -130,7 +108,7 @@ const List = ({ currentUser, list }) => {
           </div>
         </AccordionSummary>
         <AccordionDetails className={classes.details}>
-          <ListItems isAuthor={isAuthor} currentUser={currentUser} items={list.items} />
+          <ListItems items={list.items} />
         </AccordionDetails>
         {/* <Divider /> */}
 
@@ -153,46 +131,29 @@ const List = ({ currentUser, list }) => {
         </div>
 
         <AccordionActions>
-          <div style={{ display: "flex" }}>
-            {currentUser && isAuthor ? (
-              <div>
-                <FormControlLabel
-                  className={classes.switch}
-                  control={
-                    <Switch
-                      size="small"
-                      checked={isPublic}
-                      onChange={handleSwitchChange}
-                      name="public"
-                      color="secondary"
-                    />
-                  }
-                  label="Public"
-                />
-
-                <IconButton
-                  color="secondary"
-                  size="small"
-                  aria-label="delete"
-                  className={classes.deleteBtn}
-                  onClick={handleDeleteList}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </div>
-            ) : null}
-
-            {!currentUser && !isAuthor ? (
-              <IconButton
-                aria-label="save"
-                color="secondary"
+          <FormControlLabel
+            className={classes.switch}
+            control={
+              <Switch
                 size="small"
-                onClick={handleSaveList}
-              >
-                {saved ? <BookmarkIcon /> : <BookmarkBorderIcon />}
-              </IconButton>
-            ) : null}
-          </div>
+                checked={isPublic}
+                onChange={handleSwitchChange}
+                name="public"
+                color="secondary"
+              />
+            }
+            label="Public"
+          />
+
+          <IconButton
+            color="secondary"
+            size="small"
+            aria-label="delete"
+            className={classes.deleteBtn}
+            onClick={handleDeleteList}
+          >
+            <DeleteIcon />
+          </IconButton>
 
           {/* <Button size="small">Cancel</Button>
           <Button size="small" color="primary">

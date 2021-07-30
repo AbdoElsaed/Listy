@@ -21,7 +21,7 @@ const MyProfile = () => {
 
       <Divider variant="middle"/>
 
-      <Lists currentUser={true}/>
+      <Lists />
     </div>
   );
 };
