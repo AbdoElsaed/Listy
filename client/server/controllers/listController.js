@@ -35,6 +35,16 @@ exports.getAllLists = async (req, res) => {
   }
 };
 
+exports.getListsForExt = async (req, res) => {
+  try {
+    const lists = await List.find({ creator: req.user._id }).select('title')
+    res.status(200).json(lists);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send(err);
+  }
+};
+
 exports.getPublicLists = async (req, res) => {
   try {
     const lists = await List.find({ public: true }).populate("items").populate("creator");
