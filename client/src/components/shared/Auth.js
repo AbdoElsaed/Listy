@@ -61,14 +61,14 @@ export const AuthProvider = ({ children }) => {
   // refresh followers list
   const refreshFollowersList = async () => {
     let token = JSON.parse(localStorage.getItem("token"));
-    const followersList = await getFollowersList(token, user?._id);
+    const followersList = await getFollowersList(token, user._id ? user._id : null);
     setFollowers(followersList);
   }
 
   // refresh following list
   const refreshFollowingList = async () => {
     let token = JSON.parse(localStorage.getItem("token"));
-    const followingList = await getFollowingList(token, user?._id);
+    const followingList = await getFollowingList(token, user._id ? user._id : null);
     setFollowing(followingList);
   }
 
