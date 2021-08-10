@@ -14,7 +14,7 @@ const Profile = ({ match }) => {
   useEffect(() => {
     (async () => {
       setLoadingOtherUser(true)
-      const handle = match.params?.username;
+      const handle = match.params && match.params.username;
       const token = JSON.parse(localStorage.getItem("token"));
       const result = await getUserByHandle(handle, token);
       if(result.err && result.err === 'invalid user name') {
