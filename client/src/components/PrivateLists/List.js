@@ -162,7 +162,6 @@ const List = ({ list }) => {
           </Button> */}
           </AccordionActions>
         ) : null}
-        ;
       </Accordion>
     </div>
   );
