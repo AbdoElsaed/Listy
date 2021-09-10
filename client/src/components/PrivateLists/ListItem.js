@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
-import Switch from "@material-ui/core/Switch";
-import YouTubeIcon from "@material-ui/icons/YouTube";
-import DescriptionIcon from "@material-ui/icons/Description";
+// import ListItemIcon from "@material-ui/core/ListItemIcon";
+// import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+// import ListItemText from "@material-ui/core/ListItemText";
+// import Switch from "@material-ui/core/Switch";
+// import YouTubeIcon from "@material-ui/icons/YouTube";
+// import DescriptionIcon from "@material-ui/icons/Description";
 import IconButton from "@material-ui/core/IconButton";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import PauseCircleFilledIcon from "@material-ui/icons/PauseCircleFilled";
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Item = ({ item }) => {
+const Item = ({ isAuthor, item }) => {
   const classes = useStyles();
   const { width } = useWindowSize();
 
@@ -63,8 +63,8 @@ const Item = ({ item }) => {
 
   const downloadVideo = async (url) => {
     const token = JSON.parse(localStorage.getItem("token"));
-    await downloadYtVideo(url, token)
-  }
+    await downloadYtVideo(url, token);
+  };
 
   const handleDeleteItem = async () => {
     const token = JSON.parse(localStorage.getItem("token"));
@@ -139,13 +139,15 @@ const Item = ({ item }) => {
             <OpenInNewIcon className={classes.btn} />
           </IconButton>
 
-          <IconButton
-            aria-label="delete"
-            color="secondary"
-            onClick={handleDeleteItem}
-          >
-            <DeleteIcon className={classes.btn} />
-          </IconButton>
+          {isAuthor ? (
+            <IconButton
+              aria-label="delete"
+              color="secondary"
+              onClick={handleDeleteItem}
+            >
+              <DeleteIcon className={classes.btn} />
+            </IconButton>
+          ) : null}
         </div>
       </ListItem>
     </div>

@@ -54,8 +54,10 @@ const UserSchema = mongoose.Schema(
         validator: (value) => {
           return validator.isEmail(value);
         },
-        message: "not a valid email!",
+        message: props => `${props.value} is not a valid email address!`,
       },
+      lowercase: true,
+      index: {unique: true}
     },
     password: {
       type: String,
@@ -63,6 +65,7 @@ const UserSchema = mongoose.Schema(
     uniqueUrl: {
       type: String,
       required: true,
+      index: {unique: true}
     },
     avatar: {
       type: ImgSchema,

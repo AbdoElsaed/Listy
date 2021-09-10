@@ -15,6 +15,7 @@ import Switch from "@material-ui/core/Switch";
 
 import { deleteList, editList } from "../../utils/api";
 import { useAuth } from "../shared/Auth";
+import { isListAuthor } from "../shared/helpers";
 
 import ListItems from "./ListItems";
 
@@ -70,7 +71,8 @@ const List = ({ list }) => {
 
   const [isPublic, setIsPublic] = useState(list.public);
 
-  const { refreshLists } = useAuth();
+  const { refreshLists, isAuthenticated, user } = useAuth();
+  const isAuthor = isAuthenticated ? isListAuthor(list, user._id) : false;
 
   const handleSwitchChange = async () => {
     const token = JSON.parse(localStorage.getItem("token"));
@@ -108,10 +110,9 @@ const List = ({ list }) => {
           </div>
         </AccordionSummary>
         <AccordionDetails className={classes.details}>
-          <ListItems items={list.items} />
+          <ListItems isAuthor={isAuthor} items={list.items} />
         </AccordionDetails>
         {/* <Divider /> */}
-
         <div className={classes.tagsContainer}>
           {list.tags
             ? list.tags.map((tag) =>
@@ -129,37 +130,39 @@ const List = ({ list }) => {
               )
             : null}
         </div>
+        {isAuthor ? (
+          <AccordionActions>
+            <FormControlLabel
+              className={classes.switch}
+              control={
+                <Switch
+                  size="small"
+                  checked={isPublic}
+                  onChange={handleSwitchChange}
+                  name="public"
+                  color="secondary"
+                />
+              }
+              label="Public"
+            />
 
-        <AccordionActions>
-          <FormControlLabel
-            className={classes.switch}
-            control={
-              <Switch
-                size="small"
-                checked={isPublic}
-                onChange={handleSwitchChange}
-                name="public"
-                color="secondary"
-              />
-            }
-            label="Public"
-          />
+            <IconButton
+              color="secondary"
+              size="small"
+              aria-label="delete"
+              className={classes.deleteBtn}
+              onClick={handleDeleteList}
+            >
+              <DeleteIcon />
+            </IconButton>
 
-          <IconButton
-            color="secondary"
-            size="small"
-            aria-label="delete"
-            className={classes.deleteBtn}
-            onClick={handleDeleteList}
-          >
-            <DeleteIcon />
-          </IconButton>
-
-          {/* <Button size="small">Cancel</Button>
+            {/* <Button size="small">Cancel</Button>
           <Button size="small" color="primary">
             Save
           </Button> */}
-        </AccordionActions>
+          </AccordionActions>
+        ) : null}
+        ;
       </Accordion>
     </div>
   );
