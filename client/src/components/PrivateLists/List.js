@@ -71,7 +71,7 @@ const List = ({ list }) => {
 
   const [isPublic, setIsPublic] = useState(list.public);
 
-  const { refreshLists, isAuthenticated, user } = useAuth();
+  const { user, refreshLists, isAuthenticated } = useAuth();
   const isAuthor = isAuthenticated ? isListAuthor(list, user._id) : false;
 
   const handleSwitchChange = async () => {

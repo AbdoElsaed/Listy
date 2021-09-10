@@ -15,7 +15,8 @@ export const createFormData = (values, stringify = []) => {
 };
 
 export const isListAuthor = (list, userId) => {
-  return list.creator._id === userId ? true : false;
+  const creatorId = list.creator._id ? list.creator._id : list.creator;
+  return  creatorId === userId ? true : false;
 };
 
 export const isSavedList = (list, user) => {
