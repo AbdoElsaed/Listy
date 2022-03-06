@@ -1,6 +1,6 @@
 //  MongoDB connection 
 const mongoose = require('mongoose')
-require('../config/config');
+// require('../config/config');
 
 mongoose.set('useCreateIndex', true);
 mongoose.set('useNewUrlParser', true);
